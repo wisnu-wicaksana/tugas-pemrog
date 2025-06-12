@@ -5,12 +5,16 @@ require('./config/passport');
 
 const authRoutes = require('./routes/auth.routes');
 const favoriteRoutes = require('./routes/favorite.routes');
+const paymentRoutes = require('./routes/payment.route');
+const webhookRoutes = require('./routes/webhook.route');
+const paymentSuccessRoute = require('./routes/payment-success.route');
 
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT;
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/api", (req, res) => {
   res.send("HELLO WORLD");
@@ -18,11 +22,11 @@ app.get("/api", (req, res) => {
 
 
 
-
 app.use('/auth', authRoutes);
 app.use("/favorites", favoriteRoutes);
-
-
+app.use('/payment', paymentRoutes);
+app.use('/webhook', webhookRoutes);
+app.use(paymentSuccessRoute);
 
 // error handler
 app.use((err, req, res, next) => {
