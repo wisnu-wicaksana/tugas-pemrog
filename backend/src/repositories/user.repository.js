@@ -11,7 +11,21 @@ async function updateIsMember(userId, isMember) {
   });
 }
 
+const getUserById = async (id) => {
+  return await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      isMember: true,
+    },
+  });
+};
+
+
 module.exports = {
   findUserById,
-  updateIsMember
+  updateIsMember,
+  getUserById
 };
