@@ -18,7 +18,7 @@ export default function DashboardPage() {
       <p><strong>Nama:</strong> {profile.name}</p>
       <p><strong>Email:</strong> {profile.email}</p>
       <p><strong>Status Member:</strong> {profile.isMember ? "Member" : "Non-Member"}</p>
-      <LogoutButton />
+      <LogoutButton /> 
     </div>
   );
 }

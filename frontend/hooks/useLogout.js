@@ -1,7 +1,7 @@
 export default function useLogout() {
   const logout = () => {
     localStorage.removeItem('token');
-    window.location.href = '/login'; // atau ganti sesuai route login kamu
+    window.location.href = '/dashboard'; 
   };
 
   return logout;

@@ -12,7 +12,7 @@ export default function CallbackPage() {
       localStorage.setItem('token', token);
       router.push('/dashboard');
     } else {
-      router.push('/login');
+      router.push('/dashboard');
     }
   }, [searchParams, router]);
 
