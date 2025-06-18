@@ -1,27 +1,29 @@
 const { findPaymentByMerchantRef } = require('../repositories/payment.repository');
 
 async function checkPaymentStatus(req, res) {
-  const { reference } = req.query;
+  const { tripay_merchant_ref } = req.query;
 
-  if (!reference) {
-    return res.status(400).send(' Parameter "reference" tidak ditemukan.');
+  if (!tripay_merchant_ref) {
+    
+    res.redirect("http://localhost:3000/dashboard?status=success");
+
   }
 
   try {
-    const payment = await findPaymentByMerchantRef(reference);
+    const payment = await findPaymentByMerchantRef(tripay_merchant_ref);
 
     if (!payment) {
-      return res.status(404).send(' Transaksi tidak ditemukan.');
+      return res.redirect('http://localhost:3000/dashboard?status=notfound');
     }
 
     if (payment.status === 'PAID') {
-      return res.send(' Pembayaran berhasil! Terima kasih.');
+      return res.redirect('http://localhost:3000/dashboard?status=success');
     } else {
-      return res.send(' Pembayaran belum diterima. Silakan cek kembali atau hubungi admin.');
+      return res.redirect('http://localhost:3000/dashboard?status=pending');
     }
   } catch (error) {
     console.error('Gagal memeriksa status pembayaran:', error);
-    return res.status(500).send(' Terjadi kesalahan saat memeriksa status pembayaran.');
+    return res.redirect('http://localhost:3000/dashboard?status=error');
   }
 }
 

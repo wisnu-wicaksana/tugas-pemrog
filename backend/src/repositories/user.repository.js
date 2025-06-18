@@ -12,8 +12,9 @@ async function updateIsMember(userId, isMember) {
 }
 
 const getUserById = async (id) => {
+  console.log('ID yang diterima getUserById:', id);
   return await prisma.user.findUnique({
-    where: { id },
+    where: { id: Number(id) },
     select: {
       id: true,
       name: true,
@@ -22,6 +23,7 @@ const getUserById = async (id) => {
     },
   });
 };
+
 
 
 module.exports = {

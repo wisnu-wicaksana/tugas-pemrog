@@ -9,8 +9,14 @@ export const useProfile = () => {
 
   useEffect(() => {
     const fetchProfile = async () => {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        setLoading(false); // tidak ada token, tidak perlu fetch
+        return;
+      }
+
       try {
-        const token = localStorage.getItem('token');
         const data = await apiClient('GET', '/user/me', null, token);
         setProfile(data);
       } catch (err) {

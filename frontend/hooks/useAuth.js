@@ -8,6 +8,7 @@ export function useAuth() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    console.log('Token di FE:', token);
     if (!token) {
       router.push('/dashboard');
     } else {
