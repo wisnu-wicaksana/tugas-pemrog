@@ -1,13 +1,20 @@
-'use client';
+import AnimeCard from './AnimeCard';
 
-import AnimeCard from "./AnimeCard";
-
-export default function AnimeList({ data }) {
+export default function AnimeList({ anime, showAdd = false, showUnfavorite = false, onRemove })
+ {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-      {data.map((anime) => (
-        <AnimeCard key={anime.mal_id} anime={anime} />
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {anime.map((a) => (
+       <AnimeCard
+  key={a.malId}
+  anime={a}
+  showAdd={showAdd}
+  showUnfavorite={showUnfavorite}
+  onRemove={onRemove}
+/>
+
       ))}
     </div>
   );
 }
+

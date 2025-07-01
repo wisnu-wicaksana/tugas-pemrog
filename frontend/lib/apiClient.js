@@ -1,5 +1,3 @@
-
-
 export const apiClient = async (method, endpoint, body = null, token = null) => {
   const headers = {
     'Content-Type': 'application/json',
@@ -23,7 +21,7 @@ export const apiClient = async (method, endpoint, body = null, token = null) => 
 
     if (!res.ok) {
       const errorData = await res.json();
-      throw new Error(errorData.message || 'Terjadi kesalahan ');
+      throw new Error(errorData.message || 'Terjadi kesalahan');
     }
 
     return await res.json();
@@ -31,4 +29,3 @@ export const apiClient = async (method, endpoint, body = null, token = null) => 
     throw error;
   }
 };
-

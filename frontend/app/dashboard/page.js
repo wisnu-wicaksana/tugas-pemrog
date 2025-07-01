@@ -30,6 +30,7 @@ export default function DashboardPage() {
         </p>
         <LogoutButton />
       </div>
+      <div><Link href="/anime" className="text-blue-600 underline">Lihat Anime</Link></div>
       <Link href="/payment">
         <button className="bg-green-600 text-white px-4 py-2 rounded">
           Beli Membership

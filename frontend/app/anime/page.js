@@ -1,29 +1,26 @@
-// frontend/app/anime/page.js
-import { getApi } from "@/lib/jikan";
-import AnimeList from "@/components/anime /AnimeList";
+'use client';
+import { useEffect, useState } from 'react';
+import AnimeList from '@/components/anime /AnimeList';
+import { getApi } from '@/lib/jikan';
 
-export const metadata = {
-  title: "Top Anime",
-};
+export default function AnimePage() {
+  const [anime, setAnime] = useState([]);
 
-export default async function AnimePage() {
-  let topAnime = [];
-
-  try {
-    const response = await getApi("top/anime", "limit=13");
-    topAnime = response.data;
-  } catch (error) {
-    return (
-      <div className="text-red-500 p-4">
-        Gagal memuat data: {error.message}
-      </div>
-    );
-  }
+  useEffect(() => {
+    getApi('top/anime', 'limit=20')
+      .then((res) => setAnime(res.data))
+      .catch(console.error);
+  }, []);
 
   return (
-    <main className="p-6">
+    <main className="p-4">
+      <div className="mb-4 text-right">
+        <a href="/favorite" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          Lihat Favorit
+        </a>
+      </div>
       <h1 className="text-2xl font-bold mb-4">Top Anime</h1>
-      <AnimeList data={topAnime} />
+      <AnimeList anime={anime} showAdd />
     </main>
   );
 }
