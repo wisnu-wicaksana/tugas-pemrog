@@ -21,7 +21,7 @@ export default function AnimeCard({ anime, showAdd = false, showUnfavorite = fal
     const token = localStorage.getItem('token');
     try {
       await apiClient('DELETE', `/favorites/${anime.malId}`, null, token);
-      onRemove?.(anime.malId); // ✅ Langsung hilangkan dari daftar tanpa reload
+      onRemove?.(anime.malId); 
     } catch (err) {
       alert('Gagal menghapus dari favorit.');
     }
