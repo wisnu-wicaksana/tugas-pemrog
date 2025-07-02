@@ -5,7 +5,7 @@ const googleLogin = (req, res) => {
   const token = generateToken(user);
 
   
-  res.redirect(`http://localhost:3000/auth/success?token=${token}`);
+  res.redirect(`https://tugas-pemrog.vercel.app/auth/success?token=${token}`);
 };
 
 module.exports = { googleLogin };
