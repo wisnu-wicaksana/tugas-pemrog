@@ -28,6 +28,13 @@ app.get("/api", (req, res) => {
   res.json({ message: "HELLO WORLD - API Server is Running!" });
 });
 
+app.get('/api/auth/test', (req, res) => {
+  res.json({ message: 'AUTH ROUTE AKTIF ✅' });
+});
+
+console.log("Auth routes loaded ✅");
+app.use('/api/auth', authRoutes);
+
 // Gunakan semua rute Anda
 app.use('/auth', authRoutes);
 app.use("/favorites", favoriteRoutes);
