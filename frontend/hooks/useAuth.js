@@ -14,7 +14,7 @@ export function useAuth() {
 
     if (!token) {
       // Jika tidak ada token, arahkan ke halaman login
-      router.push('/login');
+      router.push('/');
     } else {
       setLoading(false);
     }

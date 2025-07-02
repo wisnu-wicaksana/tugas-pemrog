@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function CallbackClient() {
   const searchParams = useSearchParams();
@@ -9,17 +9,15 @@ export default function CallbackClient() {
 
   useEffect(() => {
     const token = searchParams.get('token');
+    console.log('✅ Token dari URL:', token);
 
     if (token) {
-      // Simpan token di localStorage (bisa juga pakai cookie)
       localStorage.setItem('token', token);
-
-      // Arahkan user ke dashboard
-      router.replace('/dashboard');
+      router.replace('/dashboard'); // ✅ langsung ke dashboard
     } else {
-      console.error('Token tidak ditemukan di URL');
+      console.warn('❌ Token tidak ditemukan di URL');
     }
   }, [searchParams, router]);
 
-  return <p>Menyimpan token dan mengalihkan...</p>;
+  return <p>Menyimpan token dan mengalihkan ke dashboard...</p>;
 }
