@@ -7,6 +7,7 @@ const googleLogin = (req, res) => {
   
  res.redirect(`${process.env.FRONTEND_URL}/auth/success?token=${token}`);
 
+
 };
 
 module.exports = { googleLogin };
