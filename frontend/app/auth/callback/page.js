@@ -1,20 +1,11 @@
-'use client';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+// app/auth/callback/page.js
+import { Suspense } from 'react';
+import CallbackClient from '@/components/CallbackClient';
 
-export default function CallbackPage() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
-  useEffect(() => {
-    const token = searchParams.get('token');
-    if (token) {
-      localStorage.setItem('token', token);
-      router.push('/dashboard');
-    } else {
-      router.push('/dashboard');
-    }
-  }, [searchParams, router]);
-
-  return <div>Loading...</div>;
+export default function Callback() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CallbackClient />
+    </Suspense>
+  );
 }
