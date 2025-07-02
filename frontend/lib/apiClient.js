@@ -1,6 +1,6 @@
 // lib/apiClient.js
 export const apiClient = async (method, endpoint, body = null, token = null) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000/api';
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
   const headers = {
     'Content-Type': 'application/json',
