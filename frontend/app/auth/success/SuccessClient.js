@@ -10,7 +10,7 @@ export default function SuccessClient() {
 
   useEffect(() => {
     // Ambil tujuan redirect dari URL, jika tidak ada, kembali ke halaman utama
-    const next = searchParams.get('next') || '/'
+    const next = searchParams.get('next') || '/dashboard'
 
     // Arahkan pengguna setelah 1.5 detik
     const timer = setTimeout(() => {
