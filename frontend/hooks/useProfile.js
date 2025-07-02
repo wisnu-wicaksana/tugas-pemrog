@@ -1,4 +1,6 @@
+// hooks/useProfile.js
 'use client';
+
 import { useEffect, useState } from 'react';
 import { apiClient } from '@/lib/apiClient';
 
@@ -20,7 +22,7 @@ export const useProfile = () => {
         const data = await apiClient('GET', '/user/me', null, token);
         setProfile(data);
       } catch (err) {
-        setError(err.message);
+        setError(err.message || 'Gagal mengambil profil');
       } finally {
         setLoading(false);
       }

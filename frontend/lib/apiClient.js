@@ -1,4 +1,7 @@
+// lib/apiClient.js
 export const apiClient = async (method, endpoint, body = null, token = null) => {
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000/api';
+
   const headers = {
     'Content-Type': 'application/json',
   };
@@ -17,7 +20,7 @@ export const apiClient = async (method, endpoint, body = null, token = null) => 
   }
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, options);
+    const res = await fetch(`${baseUrl}${endpoint}`, options);
 
     if (!res.ok) {
       const errorData = await res.json();

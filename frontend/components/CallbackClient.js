@@ -1,31 +1,25 @@
-// components/CallbackClient.js
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 export default function CallbackClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const supabase = createClientComponentClient();
 
   useEffect(() => {
-    const processAuth = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+    const token = searchParams.get('token');
 
-      if (session) {
-        // Arahkan pengguna ke halaman utama setelah login berhasil
-        router.push('/dashboard');
-      }
-    };
+    if (token) {
+      // Simpan token di localStorage (bisa juga pakai cookie)
+      localStorage.setItem('token', token);
 
-    processAuth();
-  }, [router, supabase]);
+      // Arahkan user ke dashboard
+      router.replace('/dashboard');
+    } else {
+      console.error('Token tidak ditemukan di URL');
+    }
+  }, [searchParams, router]);
 
-  // Anda dapat menampilkan pesan loading di sini
-  return <p>Processing authentication...</p>;
+  return <p>Menyimpan token dan mengalihkan...</p>;
 }

@@ -1,4 +1,6 @@
+// hooks/useAuth.js
 'use client';
+
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -9,8 +11,10 @@ export function useAuth() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     console.log('Token di FE:', token);
+
     if (!token) {
-      router.push('/dashboard');
+      // Jika tidak ada token, arahkan ke halaman login
+      router.push('/login');
     } else {
       setLoading(false);
     }
