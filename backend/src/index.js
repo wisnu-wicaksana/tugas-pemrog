@@ -36,12 +36,12 @@ console.log("Auth routes loaded ✅");
 app.use('/api/auth', authRoutes);
 
 // Gunakan semua rute Anda
-app.use('/auth', authRoutes);
-app.use("/favorites", favoriteRoutes);
-app.use('/payment', paymentRoutes);
-app.use('/webhook', webhookRoutes);
-app.use(paymentSuccessRoute);
-app.use('/user', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/favorites', favoriteRoutes);
+app.use('/api/payment', paymentRoutes);
+app.use('/api/webhook', webhookRoutes);
+app.use('/api', paymentSuccessRoute);
 
 // Error handler
 app.use((err, req, res, next) => {
