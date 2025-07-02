@@ -1,21 +1,21 @@
-'use client';
+// file: frontend/app/auth/success/page.js
+import { Suspense } from 'react'
+import SuccessClient from './SuccessClient' // Impor komponen klien kita
 
-import { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+// Komponen untuk tampilan loading
+function Loading() {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <p>Memuat...</p>
+    </div>
+  )
+}
 
-export default function SuccessPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const token = searchParams.get('token');
-    if (token) {
-      localStorage.setItem('token', token);
-      router.replace('/dashboard'); 
-    } else {
-      router.replace('/login'); 
-    }
-  }, [router, searchParams]);
-
-  return <p>Proses login... mohon tunggu.</p>;
+// Ini adalah Server Component yang akan dirender pertama kali
+export default function AuthSuccessPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <SuccessClient />
+    </Suspense>
+  )
 }
