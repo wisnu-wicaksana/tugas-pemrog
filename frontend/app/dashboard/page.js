@@ -1,9 +1,13 @@
-import dynamic from "next/dynamic";
+// app/dashboard/page.js
 
-const DashboardClient = dynamic(() => import("./dashboardCliant.js"), {
-  ssr: false,
-});
+import { Suspense } from "react";
+import DashboardClient from "./dashboardClient"; // Pastikan path import ini benar
 
 export default function DashboardPage() {
-  return <DashboardClient />;
+  return (
+    // Bungkus komponen yang menggunakan useSearchParams dengan Suspense
+    <Suspense fallback={<div>Loading page...</div>}>
+      <DashboardClient />
+    </Suspense>
+  );
 }
