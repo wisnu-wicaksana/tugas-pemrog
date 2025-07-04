@@ -13,6 +13,7 @@ export default function Creator() {
     setLoading(true);
     getApi('top/people', 'limit=20') // Jikan v4 endpoint for top people (creators)
       .then((res) => {
+        console.log("✔️ Debug res:", res);
         setCreators(res.data);
       })
       .catch(console.error)
