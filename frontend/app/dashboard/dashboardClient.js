@@ -86,11 +86,11 @@ export default function DashboardClient() {
             </button>
           </Link>
         </div>
-
+      <div>TOP 10</div>
       <Anime />
       <Character />
       <Manga />
-      <Creator />
+      
     </>
   );
 }
