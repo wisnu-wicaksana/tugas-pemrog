@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 
-const DashboardClient = dynamic(() => import("@/components/DashboardClient"), {
+const DashboardClient = dynamic(() => import("./dashboardCliant.js"), {
   ssr: false,
 });
 
