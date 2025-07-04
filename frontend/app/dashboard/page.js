@@ -1,5 +1,5 @@
 "use client";
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"; //paksa csr 
 
 import { useAuth } from "@/hooks/useAuth";
 import LogoutButton from "@/components/LogoutButton";
