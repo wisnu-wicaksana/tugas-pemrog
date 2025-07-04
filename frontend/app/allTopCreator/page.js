@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import MangaList from '@/components/manga/MangaList';
+import CreatorList from '@/components/creator/CreatorList';
 import { getApi } from '@/lib/jikan';
 import Link from 'next/link';
 
-export default function AllTopMangaPage() {
-  const [manga, setManga] = useState([]);
+export default function AllTopCreatorPage() {
+  const [creators, setCreators] = useState([]);
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [lastPage, setLastPage] = useState(1);
@@ -14,9 +14,9 @@ export default function AllTopMangaPage() {
 
   useEffect(() => {
     setLoading(true);
-    getApi('top/manga', `page=${page}&limit=20`)
+    getApi('top/people', `page=${page}&limit=20`)
       .then((res) => {
-        setManga(res.data);
+        setCreators(res.data);
         setHasNextPage(res.pagination?.has_next_page ?? true);
         setLastPage(res.pagination?.last_visible_page ?? 1);
       })
@@ -40,12 +40,12 @@ export default function AllTopMangaPage() {
         </Link>
       </div>
 
-      <h1 className="text-2xl font-bold mb-4">Top Manga - Page {page}</h1>
+      <h1 className="text-2xl font-bold mb-4">Top Creators - Page {page}</h1>
 
       {loading ? (
         <p className="text-center text-gray-500">Loading...</p>
       ) : (
-        <MangaList manga={manga} />
+        <CreatorList creators={creators} />
       )}
 
       <div className="mt-6 flex justify-center items-center space-x-4">

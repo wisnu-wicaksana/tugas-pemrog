@@ -7,6 +7,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Anime from "@/components/anime /Anime";
 import Character from "@/components/character/Character";
+import Manga from "@/components/manga/Manga";
+import Creator from "@/components/creator/Creator";
 
 export default function DashboardClient() {
   const { loading: authLoading } = useAuth();
@@ -76,7 +78,7 @@ export default function DashboardClient() {
           Beli Membership
         </button>
       </Link>
-      
+
       <div className="mb-4 text-right">
           <Link href="/favorite">
             <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
@@ -87,6 +89,8 @@ export default function DashboardClient() {
 
       <Anime />
       <Character />
+      <Manga />
+      <Creator />
     </>
   );
 }
