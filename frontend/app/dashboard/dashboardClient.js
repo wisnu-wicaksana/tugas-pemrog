@@ -5,6 +5,7 @@ import LogoutButton from "@/components/LogoutButton";
 import { useProfile } from "@/hooks/useProfile";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import Anime from "@/components/anime /Anime";
 
 export default function DashboardClient() {
   const { loading: authLoading } = useAuth();
@@ -78,6 +79,7 @@ export default function DashboardClient() {
           Beli Membership
         </button>
       </Link>
+      <Anime />
     </>
   );
 }
