@@ -9,13 +9,17 @@ export default function Manga() {
   const [manga, setManga] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setLoading(true);
-    getApi('top/manga', 'limit=20')
-      .then((res) => setManga(res.data))
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
+ useEffect(() => {
+  setLoading(true);
+  getApi('top/manga', 'limit=20')
+    .then((res) => {
+      console.log("Debug res:", res); // tampilkan semua isi
+      setManga(res.data); // tambahkan .data di sini
+    })
+    .catch(console.error)
+    .finally(() => setLoading(false));
+}, []);
+
 
   return (
     <main className="p-4">
