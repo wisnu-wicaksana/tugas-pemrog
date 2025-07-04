@@ -27,7 +27,7 @@ export default function FavoritePage() {
     setFavorites((prev) => prev.filter((a) => a.malId !== malId))
   }
 />}
-<a href="/anime" className="inline-block px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+<a href="/allAnimeTop" className="inline-block px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
         ← Kembali ke Anime
       </a>
       
