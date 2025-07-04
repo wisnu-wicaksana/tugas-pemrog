@@ -9,7 +9,7 @@ export default function Anime() {
   const [anime, setAnime] = useState([]);
 
   useEffect(() => {
-    getApi('top/anime', 'limit=20')
+    getApi('top/anime', 'limit=10')
       .then((res) => setAnime(res.data))
       .catch(console.error);
   }, []);

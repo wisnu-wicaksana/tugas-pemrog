@@ -11,7 +11,7 @@ export default function Creator() {
 
   useEffect(() => {
     setLoading(true);
-    getApi('top/people', 'limit=20') // Jikan v4 endpoint for top people (creators)
+    getApi('top/people', 'limit=10') // Jikan v4 endpoint for top people (creators)
       .then((res) => {
         console.log("✔️ Debug res:", res);
         setCreators(res.data);

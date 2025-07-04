@@ -11,7 +11,7 @@ export default function Manga() {
 
  useEffect(() => {
   setLoading(true);
-  getApi('top/manga', 'limit=20')
+  getApi('top/manga', 'limit=10')
     .then((res) => {
       console.log("Debug res:", res); // tampilkan semua isi
       setManga(res.data); // tambahkan .data di sini

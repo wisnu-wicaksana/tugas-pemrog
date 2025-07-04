@@ -9,7 +9,7 @@ export default function Character() {
 
   useEffect(() => {
     setLoading(true);
-    getApi('top/characters', 'limit=20')
+    getApi('top/characters', 'limit=10')
       .then((res) => {
         setCharacters(res.data);
       })
