@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import CharacterList from '@/components/character/CharacterList';
 import { getApi } from '@/lib/jikan';
 
-export default function CharactersPreviewPage() {
+export default function Character() {
   const [characters, setCharacters] = useState([]);
   const [loading, setLoading] = useState(false);
 

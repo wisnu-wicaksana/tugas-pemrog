@@ -6,6 +6,7 @@ import { useProfile } from "@/hooks/useProfile";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Anime from "@/components/anime /Anime";
+import Character from "@/components/character/Character";
 
 export default function DashboardClient() {
   const { loading: authLoading } = useAuth();
@@ -69,17 +70,14 @@ export default function DashboardClient() {
         <LogoutButton />
       </div>
 
-      <div>
-        <Link href="/anime" className="text-blue-600 underline">
-          Lihat Anime
-        </Link>
-      </div>
+      
       <Link href="/payment">
         <button className="bg-green-600 text-white px-4 py-2 rounded mt-2">
           Beli Membership
         </button>
       </Link>
       <Anime />
+      <Character />
     </>
   );
 }
