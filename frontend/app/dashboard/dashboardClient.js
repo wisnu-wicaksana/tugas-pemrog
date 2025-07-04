@@ -76,6 +76,15 @@ export default function DashboardClient() {
           Beli Membership
         </button>
       </Link>
+      
+      <div className="mb-4 text-right">
+          <Link href="/favorite">
+            <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+              Lihat Favorit
+            </button>
+          </Link>
+        </div>
+
       <Anime />
       <Character />
     </>
