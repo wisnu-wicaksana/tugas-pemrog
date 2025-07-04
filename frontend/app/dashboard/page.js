@@ -1,85 +1,9 @@
-"use client";
-export const dynamic = "force-dynamic"; //paksa csr 
+import dynamic from "next/dynamic";
 
-import { useAuth } from "@/hooks/useAuth";
-import LogoutButton from "@/components/LogoutButton";
-import { useProfile } from "@/hooks/useProfile";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+const DashboardClient = dynamic(() => import("@/components/DashboardClient"), {
+  ssr: false,
+});
 
 export default function DashboardPage() {
-  const { loading: authLoading } = useAuth();
-  const { profile, loading: profileLoading, error } = useProfile();
-  const searchParams = useSearchParams();
-  const paymentStatus = searchParams.get("status");
-
-  if (authLoading || profileLoading) return <div>Loading...</div>;
-  if (error) return <div className="text-red-500">Error: {error}</div>;
-  if (!profile) return <div>Data profil tidak ditemukan.</div>;
-
-  // Fungsi render status pembayaran
-  const renderPaymentStatus = () => {
-    switch (paymentStatus) {
-      case "success":
-        return (
-          <div className="p-2 mb-4 bg-green-100 text-green-800 rounded">
-            ✅ Pembayaran berhasil!
-          </div>
-        );
-      case "pending":
-        return (
-          <div className="p-2 mb-4 bg-yellow-100 text-yellow-800 rounded">
-            ⏳ Pembayaran masih diproses.
-          </div>
-        );
-      case "notfound":
-        return (
-          <div className="p-2 mb-4 bg-gray-100 text-gray-800 rounded">
-            ❌ Pembayaran tidak ditemukan.
-          </div>
-        );
-      case "error":
-        return (
-          <div className="p-2 mb-4 bg-red-100 text-red-800 rounded">
-            ⚠️ Terjadi kesalahan saat memproses pembayaran.
-          </div>
-        );
-      default:
-        return null; // tidak tampilkan apa-apa kalau tidak ada status
-    }
-  };
-
-  return (
-    <>
-      <div className="p-4">
-        {renderPaymentStatus()}
-
-        <h1 className="text-xl font-bold mb-2">
-          Selamat datang di Dashboard!
-        </h1>
-        <p>
-          <strong>Nama:</strong> {profile.name}
-        </p>
-        <p>
-          <strong>Email:</strong> {profile.email}
-        </p>
-        <p>
-          <strong>Status Member:</strong>{" "}
-          {profile.isMember ? "Member" : "Non-Member"}
-        </p>
-        <LogoutButton />
-      </div>
-
-      <div>
-        <Link href="/anime" className="text-blue-600 underline">
-          Lihat Anime
-        </Link>
-      </div>
-      <Link href="/payment">
-        <button className="bg-green-600 text-white px-4 py-2 rounded mt-2">
-          Beli Membership
-        </button>
-      </Link>
-    </>
-  );
+  return <DashboardClient />;
 }
