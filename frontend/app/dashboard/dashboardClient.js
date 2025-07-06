@@ -1,96 +1,63 @@
-"use client";
+// file: frontend/app/dashboard/dashboardClient.js
+'use client';
 
-import { useAuth } from "@/hooks/useAuth";
-import LogoutButton from "@/components/LogoutButton";
-import { useProfile } from "@/hooks/useProfile";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import Anime from "@/components/anime /Anime";
-import Character from "@/components/character/Character";
-import Manga from "@/components/manga/Manga";
-import Creator from "@/components/creator/Creator";
+import { useState } from 'react';
+// ... (impor lainnya tetap sama)
+import AnimeList from '@/components/anime/AnimeList';
+import MangaList from '@/components/manga/MangaList';
+import CharacterList from '@/components/character/CharacterList';
+import Header from '@/components/Header'; // Impor Header
 
-export default function DashboardClient() {
-  const { loading: authLoading } = useAuth();
-  const { profile, loading: profileLoading, error } = useProfile();
-  const searchParams = useSearchParams();
-  const paymentStatus = searchParams.get("status");
+export default function DashboardClient({ user, topAnime, topManga, topCharacters, initialFavorites }) {
+  // 1. Buat state untuk menyimpan kata kunci pencarian
+  const [searchTerm, setSearchTerm] = useState('');
+  const [favorites, setFavorites] = useState(initialFavorites);
+  // ... (handleFavoriteChange tetap sama)
 
-  if (authLoading || profileLoading) return <div>Loading...</div>;
-  if (error) return <div className="text-red-500">Error: {error}</div>;
-  if (!profile) return <div>Data profil tidak ditemukan.</div>;
+  // 2. Filter daftar anime berdasarkan searchTerm
+  const filteredAnime = topAnime?.data?.filter(anime => 
+    anime.title.toLowerCase().includes(searchTerm.toLowerCase())
+  ) || [];
 
-  const renderPaymentStatus = () => {
-    switch (paymentStatus) {
-      case "success":
-        return (
-          <div className="p-2 mb-4 bg-green-100 text-green-800 rounded">
-            ✅ Pembayaran berhasil!
-          </div>
-        );
-      case "pending":
-        return (
-          <div className="p-2 mb-4 bg-yellow-100 text-yellow-800 rounded">
-            ⏳ Pembayaran masih diproses.
-          </div>
-        );
-      case "notfound":
-        return (
-          <div className="p-2 mb-4 bg-gray-100 text-gray-800 rounded">
-            ❌ Pembayaran tidak ditemukan.
-          </div>
-        );
-      case "error":
-        return (
-          <div className="p-2 mb-4 bg-red-100 text-red-800 rounded">
-            ⚠️ Terjadi kesalahan saat memproses pembayaran.
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
+  // Lakukan hal yang sama untuk manga dan karakter
+  const filteredManga = topManga?.data?.filter(manga =>
+    manga.title.toLowerCase().includes(searchTerm.toLowerCase())
+  ) || [];
+
+  const filteredCharacters = topCharacters?.data?.filter(character =>
+    character.name.toLowerCase().includes(searchTerm.toLowerCase())
+  ) || [];
 
   return (
+    // Kita pindahkan Header ke sini agar bisa berbagi state
     <>
-      <div className="p-4">
-        {renderPaymentStatus()}
-
-        <h1 className="text-xl font-bold mb-2">
-          Selamat datang di Dashboard!
+      <Header user={user} onSearch={setSearchTerm} />
+      <main className="p-4 sm:p-6 lg:p-8">
+        <h1 className="text-3xl font-bold text-white mb-8">
+          Selamat Datang, {user?.name || 'Pengguna'}!
         </h1>
-        <p>
-          <strong>Nama:</strong> {profile.name}
-        </p>
-        <p>
-          <strong>Email:</strong> {profile.email}
-        </p>
-        <p>
-          <strong>Status Member:</strong>{" "}
-          {profile.isMember ? "Member" : "Non-Member"}
-        </p>
-        <LogoutButton />
-      </div>
 
-      
-      <Link href="/payment">
-        <button className="bg-green-600 text-white px-4 py-2 rounded mt-2">
-          Beli Membership
-        </button>
-      </Link>
+        <div className="space-y-12">
+          <section>
+            <h2 className="text-2xl font-bold mb-4">Top Anime</h2>
+            <AnimeList 
+              anime={filteredAnime} // 3. Gunakan data yang sudah difilter
+              favorites={favorites}
+              // ... sisa props
+            />
+          </section>
+          
+          <section>
+            <h2 className="text-2xl font-bold mb-4">Top Manga</h2>
+            <MangaList manga={filteredManga} />
+          </section>
 
-      <div className="mb-4 text-right">
-          <Link href="/favorite">
-            <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-              Lihat Favorit
-            </button>
-          </Link>
+          <section>
+            <h2 className="text-2xl font-bold mb-4">Top Characters</h2>
+            <CharacterList characters={filteredCharacters} />
+          </section>
         </div>
-      <div>TOP 10</div>
-      <Anime />
-      <Character />
-      <Manga />
-      
+      </main>
     </>
   );
 }

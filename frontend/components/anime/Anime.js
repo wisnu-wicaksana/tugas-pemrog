@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import AnimeList from '@/components/anime /AnimeList';
+import AnimeList from '@/components/anime/AnimeList';
 import { getApi } from '@/lib/jikan';
 import Link from 'next/link';
 
