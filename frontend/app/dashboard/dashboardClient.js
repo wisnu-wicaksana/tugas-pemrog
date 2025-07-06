@@ -24,7 +24,7 @@ export default function DashboardClient({ topAnime, topManga, topCharacters }) {
   }, [profile]); // Dijalankan kembali jika 'profile' berubah
 
   const handleFavoriteChange = async () => {
-    const res = await apiClient.get('/favorites');
+    const res = await apiClient.get('/favorite');
     setFavorites(res.data || []);
   };
 
