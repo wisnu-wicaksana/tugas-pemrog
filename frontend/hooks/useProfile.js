@@ -1,8 +1,8 @@
-// hooks/useProfile.js
+// file: frontend/hooks/useProfile.js
 'use client';
 
 import { useEffect, useState } from 'react';
-import { apiClient } from '@/lib/apiClient';
+import apiClient from '@/lib/apiClient'; // Menggunakan apiClient (axios) yang baru
 
 export const useProfile = () => {
   const [profile, setProfile] = useState(null);
@@ -11,25 +11,21 @@ export const useProfile = () => {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem('token');
-
-      if (!token) {
-        setLoading(false); // tidak ada token, tidak perlu fetch
-        return;
-      }
-
       try {
-        const data = await apiClient('GET', '/user/me', null, token);
-        setProfile(data);
+        // Cara baru memanggil API: lebih singkat dan token sudah otomatis.
+        // Asumsi endpoint profil Anda adalah /user/profile
+        const response = await apiClient.get('/user/me'); 
+        setProfile(response.data);
       } catch (err) {
-        setError(err.message || 'Gagal mengambil profil');
+        setError(err.response?.data?.message || 'Gagal memuat profil.');
+        console.error("Error fetching profile:", err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProfile();
-  }, []);
+  }, []); // Hanya berjalan sekali saat komponen dimuat
 
   return { profile, loading, error };
 };

@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import apiClient from '@/lib/apiClient';
 import AnimeList from '@/components/anime/AnimeList';
-import Sidebar from '@/components/Sidebar';
+
 import Header from '@/components/Header';
+import DashboardLayout from '@/components/layouts/DashboardLayouts';
 
 export default function FavoritePage() {
   const [favorites, setFavorites] = useState([]);
@@ -58,10 +59,7 @@ export default function FavoritePage() {
   }));
 
   return (
-    <div className="flex bg-gray-950 min-h-screen">
-      <Sidebar />
-      <main className="flex-1 lg:ml-64">
-        <Header />
+    <DashboardLayout>
         <div className="p-4 sm:p-6 lg:p-8">
           <h1 className="text-3xl font-bold text-white mb-6">Anime Favorit Anda</h1>
           
@@ -79,7 +77,7 @@ export default function FavoritePage() {
             </div>
           )}
         </div>
-      </main>
-    </div>
+</DashboardLayout>
+    
   );
 }

@@ -1,25 +1,37 @@
-// file: frontend/app/dashboard/dashboardClient.js
 'use client';
 
-import { useState } from 'react';
-// ... (impor lainnya tetap sama)
+import { useState, useEffect } from 'react';
+import { useProfile } from '@/hooks/useProfile';
+import apiClient from '@/lib/apiClient';
+import Header from '@/components/Header';
 import AnimeList from '@/components/anime/AnimeList';
 import MangaList from '@/components/manga/MangaList';
 import CharacterList from '@/components/character/CharacterList';
-import Header from '@/components/Header'; // Impor Header
+import Link from 'next/link';
 
-export default function DashboardClient({ user, topAnime, topManga, topCharacters, initialFavorites }) {
-  // 1. Buat state untuk menyimpan kata kunci pencarian
+export default function DashboardClient({ topAnime, topManga, topCharacters }) {
+  const { profile, loading: profileLoading, error } = useProfile();
+  const [favorites, setFavorites] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [favorites, setFavorites] = useState(initialFavorites);
-  // ... (handleFavoriteChange tetap sama)
 
-  // 2. Filter daftar anime berdasarkan searchTerm
+  // Ambil data favorit setelah profil berhasil dimuat
+  useEffect(() => {
+    if (profile) { // Hanya jalankan jika profil sudah ada
+      apiClient.get('/favorites')
+        .then(res => setFavorites(res.data || []))
+        .catch(console.error);
+    }
+  }, [profile]); // Dijalankan kembali jika 'profile' berubah
+
+  const handleFavoriteChange = async () => {
+    const res = await apiClient.get('/favorites');
+    setFavorites(res.data || []);
+  };
+
   const filteredAnime = topAnime?.data?.filter(anime => 
     anime.title.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
 
-  // Lakukan hal yang sama untuk manga dan karakter
   const filteredManga = topManga?.data?.filter(manga =>
     manga.title.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
@@ -29,35 +41,49 @@ export default function DashboardClient({ user, topAnime, topManga, topCharacter
   ) || [];
 
   return (
-    // Kita pindahkan Header ke sini agar bisa berbagi state
-    <>
-      <Header user={user} onSearch={setSearchTerm} />
+    <div className="bg-gray-950 min-h-screen">
+      <Header user={profile} loading={profileLoading} onSearch={setSearchTerm} />
       <main className="p-4 sm:p-6 lg:p-8">
-        <h1 className="text-3xl font-bold text-white mb-8">
-          Selamat Datang, {user?.name || 'Pengguna'}!
-        </h1>
+        {profileLoading ? (
+          <p className="text-gray-400">Memuat data...</p>
+        ) : error ? (
+          <p className="text-red-400">Error: {error}</p>
+        ) : (
+          <div className="space-y-12">
+            <h1 className="text-3xl font-bold text-white">
+              Selamat Datang, {profile?.name || 'Pengguna'}!
+            </h1>
+            
+            <section>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-white">Top Anime</h2>
+                <Link href="/allAnimeTop" className="text-sm font-semibold text-blue-400 hover:text-blue-300">Lihat Semua</Link>
+              </div>
+              <AnimeList 
+                anime={filteredAnime}
+                favorites={favorites}
+                onFavoriteChange={handleFavoriteChange}
+              />
+            </section>
 
-        <div className="space-y-12">
-          <section>
-            <h2 className="text-2xl font-bold mb-4">Top Anime</h2>
-            <AnimeList 
-              anime={filteredAnime} // 3. Gunakan data yang sudah difilter
-              favorites={favorites}
-              // ... sisa props
-            />
-          </section>
-          
-          <section>
-            <h2 className="text-2xl font-bold mb-4">Top Manga</h2>
-            <MangaList manga={filteredManga} />
-          </section>
+            <section>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-white">Top Manga</h2>
+                <Link href="/allTopManga" className="text-sm font-semibold text-blue-400 hover:text-blue-300">Lihat Semua</Link>
+              </div>
+              <MangaList manga={filteredManga} />
+            </section>
 
-          <section>
-            <h2 className="text-2xl font-bold mb-4">Top Characters</h2>
-            <CharacterList characters={filteredCharacters} />
-          </section>
-        </div>
+            <section>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-white">Top Characters</h2>
+                <Link href="/allTopCharacter" className="text-sm font-semibold text-blue-400 hover:text-blue-300">Lihat Semua</Link>
+              </div>
+              <CharacterList characters={filteredCharacters} />
+            </section>
+          </div>
+        )}
       </main>
-    </>
+    </div>
   );
 }
