@@ -145,7 +145,7 @@ export default function DashboardClient({ topAnime, topManga, topCharacters }) {
           {/* 2. Tampilan saat sedang mencari */}
           {searchTerm && (
             <div>
-              <h1 className="text-3xl font-bold text-white mb-4">Hasil Pencarian untuk "{searchTerm}"</h1>
+              <h1 className="text-3xl font-bold text-white mb-4">Hasil Pencarian untuk &quot;{searchTerm}&quot;</h1>
               {isSearching ? (
                 // Tampilkan skeleton saat loading pencarian
                 <div className="space-y-12">
