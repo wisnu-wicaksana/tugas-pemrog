@@ -60,7 +60,7 @@ const Header = ({ user, onSearch }) => {
         {/* Dropdown Menu yang Didesain Ulang */}
         {isDropdownOpen && (
           <div 
-            className="absolute right-0 mt-3 w-72 bg-gray-800/90 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2"
+            className="absolute right-0 mt-8 w-72 bg-gray-800 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2"
           >
             {/* User Info */}
             <div className="px-4 py-3">
