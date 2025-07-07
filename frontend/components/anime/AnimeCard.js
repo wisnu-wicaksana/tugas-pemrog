@@ -44,6 +44,7 @@ const AnimeCard = ({ anime, isFavorited, onFavoriteChange }) => {
           title: anime.title,
           imageUrl: anime.images?.webp?.large_image_url,
           score: anime.score,
+          type: 'ANIME',
         });
         toast.custom((t) => (
           <CustomToast
@@ -69,7 +70,7 @@ const AnimeCard = ({ anime, isFavorited, onFavoriteChange }) => {
   // ... (sisa kode untuk return JSX tidak perlu diubah, tetap sama)
   return (
     <Link
-      href={`/detail/${anime.mal_id}`}
+      href={`/detail/anime/${anime.mal_id}`}
       className="group block bg-gray-800 rounded-lg shadow-lg overflow-hidden 
                  transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/20 transform hover:-translate-y-1"
     >

@@ -35,7 +35,7 @@ const CharacterCard = ({ character, isFavorited, onFavoriteChange }) => {
   };
 
   return (
-    <Link href={character.url} target="_blank" rel="noopener noreferrer" className="group block bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/20 transform hover:-translate-y-1">
+    <Link  href={`/detail/character/${character.mal_id}`} className="group block bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/20 transform hover:-translate-y-1">
       <div className="relative w-full aspect-[2/3]">
         <Image src={character.images?.webp?.image_url || character.images?.jpg?.image_url} alt={`Picture of ${character.name}`} fill style={{ objectFit: 'cover' }} className="transition-transform duration-300 group-hover:scale-105" sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw" />
          <button 
