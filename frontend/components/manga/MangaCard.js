@@ -26,6 +26,7 @@ const MangaCard = ({ manga, isFavorited, onFavoriteChange }) => {
           title: manga.title,
           imageUrl: manga.images?.webp?.large_image_url,
           score: manga.score,
+          year : manga.year,
           type: 'MANGA', // Menambahkan tipe data
         });
         toast.custom((t) => <CustomToast t={t} type="success" title="Berhasil Ditambahkan" message={`"${manga.title}" telah ditambahkan.`} />);

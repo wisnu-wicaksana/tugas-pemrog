@@ -44,6 +44,7 @@ const AnimeCard = ({ anime, isFavorited, onFavoriteChange }) => {
           title: anime.title,
           imageUrl: anime.images?.webp?.large_image_url,
           score: anime.score,
+          year: anime.year,
           type: 'ANIME',
         });
         toast.custom((t) => (
