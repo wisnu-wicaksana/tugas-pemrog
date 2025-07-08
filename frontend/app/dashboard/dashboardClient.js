@@ -62,6 +62,8 @@ export default function DashboardClient({ topAnime, topManga, topCharacters }) {
   const [searchResults, setSearchResults] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
 
+  const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+
   useEffect(() => {
     if (profile) {
       apiClient.get("/favorites").then((res) => setFavorites(res.data || [])).catch(console.error);
@@ -97,7 +99,22 @@ export default function DashboardClient({ topAnime, topManga, topCharacters }) {
     return () => clearTimeout(searchDelay);
   }, [searchTerm]);
 
-  const heroAnime = topAnime?.data?.[0];
+// ▼▼▼ PERSIAPAN DATA UNTUK HERO SLIDER ▼▼▼
+  const heroItems = [
+    topAnime?.data?.[0] ? { type: 'anime', data: topAnime.data[0] } : null,
+    topManga?.data?.[0] ? { type: 'manga', data: topManga.data[0] } : null,
+    topCharacters?.data?.[0] ? { type: 'character', data: { ...topCharacters.data[0], title: topCharacters.data[0].name } } : null
+  ].filter(Boolean); // Filter untuk menghapus item yang null
+
+  // Efek untuk slider otomatis
+  useEffect(() => {
+    if (heroItems.length > 1) {
+      const timer = setTimeout(() => {
+        setCurrentHeroIndex((prevIndex) => (prevIndex + 1) % heroItems.length);
+      }, 7000); // Ganti slide setiap 7 detik
+      return () => clearTimeout(timer);
+    }
+  }, [currentHeroIndex, heroItems.length]);
 
   // ================= RENDER LOGIC =================
 
@@ -128,16 +145,28 @@ export default function DashboardClient({ topAnime, topManga, topCharacters }) {
       <Header user={profile} loading={profileLoading} onSearch={setSearchTerm} />
       <main className="p-4 sm:p-6 lg:p-8">
         <div className="space-y-12">
-          {!searchTerm && heroAnime && (
+          {!searchTerm && heroItems.length > 0 && (
             <section className="relative h-80 md:h-[450px] rounded-2xl overflow-hidden">
-              <div className="absolute inset-0">
-                <Image src={heroAnime.images?.webp?.large_image_url} alt={heroAnime.title} fill style={{ objectFit: 'cover' }} className="opacity-30" priority />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/70 to-transparent"></div>
-              </div>
-              <div className="relative h-full flex flex-col justify-end p-8 md:p-12">
-                <h1 className="text-3xl md:text-5xl font-extrabold text-white leading-tight shadow-black/50 [text-shadow:0_2px_4px_var(--tw-shadow-color)]">{heroAnime.title}</h1>
-                <p className="text-gray-300 mt-2 max-w-2xl line-clamp-2 md:line-clamp-3 text-sm md:text-base">{heroAnime.synopsis}</p>
-                <Link href={`/detail/${heroAnime.mal_id}`} className="mt-6 inline-block bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600 transition-transform hover:scale-105 shadow-lg">Lihat Detail</Link>
+              {heroItems.map((item, index) => (
+                <div 
+                  key={item.data.mal_id}
+                  className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentHeroIndex ? 'opacity-100' : 'opacity-0'}`}
+                >
+                  <Image src={item.data.images?.webp?.large_image_url || item.data.images?.webp?.image_url} alt={item.data.title} fill style={{ objectFit: 'cover' }} className="opacity-30" priority={index === 0} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/70 to-transparent"></div>
+                  <div className="relative h-full flex flex-col justify-end p-8 md:p-12">
+                    <p className="font-semibold text-blue-400 mb-1">Top #{index + 1} {item.type.charAt(0).toUpperCase() + item.type.slice(1)}</p>
+                    <h1 className="text-3xl md:text-5xl font-extrabold text-white leading-tight shadow-black/50 [text-shadow:0_2px_4px_var(--tw-shadow-color)]">{item.data.title}</h1>
+                    <p className="text-gray-300 mt-2 max-w-2xl line-clamp-2 md:line-clamp-3 text-sm md:text-base">{item.data.synopsis || `Karakter favorit dengan ${item.data.favorites?.toLocaleString()} suara.`}</p>
+                    <Link href={`/detail/${item.type}/${item.data.mal_id}`} className="mt-6 inline-block bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600 transition-transform hover:scale-105 shadow-lg">Lihat Detail</Link>
+                  </div>
+                </div>
+              ))}
+              {/* Tombol Navigasi Dots */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+                {heroItems.map((_, index) => (
+                  <button key={index} onClick={() => setCurrentHeroIndex(index)} className={`w-3 h-3 rounded-full transition-colors ${index === currentHeroIndex ? 'bg-white' : 'bg-white/50 hover:bg-white'}`}></button>
+                ))}
               </div>
             </section>
           )}
