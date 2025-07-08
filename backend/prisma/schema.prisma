@@ -26,10 +26,13 @@ model Favorite {
   malId     Int
   title     String
   imageUrl  String
+  score     Int?     // Tambahkan score (opsional)
+  year      Int?     // Optional
   createdAt DateTime @default(now())
 
   @@unique([userId, malId], name: "userId_malId")
 }
+
 
 model Payment {
   id            Int      @id @default(autoincrement())

@@ -2,10 +2,10 @@ const favoriteService = require('../services/favorite.service');
 
 const addFavorite = async (req, res) => {
   const userId = req.user.id;
-  const { malId, title, imageUrl } = req.body;
+  const { malId, title, imageUrl, year, score } = req.body;
 
   try {
-    const favorite = await favoriteService.addToFavorite({ userId, malId, title, imageUrl });
+    const favorite = await favoriteService.addToFavorite({ userId, malId, title, imageUrl, year, score});
     res.status(201).json({ message: 'Berhasil ditambahkan ke favorit', favorite });
   } catch (error) {
     res.status(400).json({ message: error.message });

@@ -11,13 +11,15 @@ const findFavorite = (userId, malId) => {
   });
 };
 
-const addFavorite = ({ userId, malId, title, imageUrl }) => {
+const addFavorite = ({ userId, malId, title, imageUrl, score, type, year }) => {
   return prisma.favorite.create({
     data: {
       userId,
       malId,
       title,
       imageUrl,
+      score,
+      year,
     },
   });
 };
