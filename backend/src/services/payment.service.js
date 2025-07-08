@@ -13,11 +13,11 @@ const {
 } = tripayConfig;
 
 async function createTripayTransaction({ userId, amount, paymentMethod }) {
-  // Validasi user
+  
   const user = await userRepo.findUserById(userId);
   if (!user) throw new Error('User tidak ditemukan');
 
-  // Cegah user membayar dua kali
+  
   const existingPayment = await paymentRepo.findActivePaymentByUser(userId);
   if (existingPayment) throw new Error('User sudah memiliki transaksi aktif');
 
@@ -46,7 +46,7 @@ async function createTripayTransaction({ userId, amount, paymentMethod }) {
     signature
   };
 
-  // Gunakan fetch bawaan Node.js
+  
   const response = await fetch(apiUrl, {
     method: 'POST',
     headers: {
@@ -62,7 +62,7 @@ async function createTripayTransaction({ userId, amount, paymentMethod }) {
     throw new Error(data.message || 'Gagal membuat transaksi');
   }
 
-  // Simpan pembayaran ke database
+  
   await paymentRepo.createPayment({
     userId,
     reference: data.data.reference,
@@ -72,7 +72,7 @@ async function createTripayTransaction({ userId, amount, paymentMethod }) {
     paymentMethod
   });
 
-  return data.data; // Kembalikan detail transaksi (payment_url, dll.)
+  return data.data; 
 }
 
 async function updatePaymentStatus(payload) {
@@ -81,12 +81,12 @@ async function updatePaymentStatus(payload) {
   const payment = await paymentRepo.findPaymentByMerchantRef(merchant_ref);
   if (!payment) throw new Error('Pembayaran tidak ditemukan');
 
-  if (payment.status === status) return; // Tidak perlu update jika sama
+  if (payment.status === status) return; 
 
-  // Update status pembayaran
+  
   await paymentRepo.updatePaymentStatus(merchant_ref, status);
 
-  // Update user isMember jika pembayaran berhasil
+  
   if (status === 'PAID') {
     await userRepo.updateIsMember(payment.userId, true);
   }

@@ -1,4 +1,4 @@
-const prisma = require('../config/db'); // sesuaikan path
+const prisma = require('../config/db'); 
 
 const findFavorite = (userId, malId) => {
   return prisma.favorite.findUnique({

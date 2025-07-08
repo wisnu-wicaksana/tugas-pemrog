@@ -6,7 +6,7 @@ async function checkPaymentStatus(req, res) {
   if (!tripay_merchant_ref) {
     
     res.redirect(`${process.env.FRONTEND_URL}/dashboard?status=success`);
-    //res.redirect(`${process.env.FRONTEND_URL}/dashboard?status=success`);
+    
   }
 
   try {
