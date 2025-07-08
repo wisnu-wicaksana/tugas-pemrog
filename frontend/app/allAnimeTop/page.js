@@ -8,6 +8,16 @@ import { getApi } from '@/lib/jikan';
 import Header from '@/components/Header';
 import AnimeList from '@/components/anime/AnimeList';
 
+const SectionHeader = ({ title }) => (
+  <div className="flex justify-between items-center mb-4">
+    <div className="flex items-center space-x-3">
+      {/* Garis aksen vertikal */}
+      <div className="w-1 h-7 bg-blue-400 rounded-full"></div>
+      <h2 className="text-2xl md:text-3xl font-bold text-white tracking-wide">{title}</h2>
+    </div>
+  </div>
+);
+
 // Komponen helper untuk kerangka (skeleton) kartu
 const CardSkeleton = () => (
   <div> 
@@ -76,7 +86,7 @@ export default function AllTopAnimePage() {
     <div className="bg-gray-950 min-h-screen">
       <Header user={profile} loading={profileLoading} />
       <main className="p-4 sm:p-6 lg:p-8">
-        <h1 className="text-3xl font-bold text-white mb-6">Semua Anime</h1>
+        <SectionHeader title="Top Anime Terpopuler" />
         
         {/* Tampilkan kerangka jika loading, atau konten jika sudah siap */}
         {loading && anime.length === 0 ? (

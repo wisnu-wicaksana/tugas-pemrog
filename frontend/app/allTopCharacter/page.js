@@ -8,7 +8,15 @@ import { getApi } from '@/lib/jikan';
 import Header from '@/components/Header';
 import CharacterList from '@/components/character/CharacterList';
 
-// Ganti komponen CardSkeleton dan GridSkeleton yang lama dengan ini:
+const SectionHeader = ({ title }) => (
+  <div className="flex justify-between items-center mb-4">
+    <div className="flex items-center space-x-3">
+      {/* Garis aksen vertikal */}
+      <div className="w-1 h-7 bg-blue-400 rounded-full"></div>
+      <h2 className="text-2xl md:text-3xl font-bold text-white tracking-wide">{title}</h2>
+    </div>
+  </div>
+);
 
 // Komponen helper untuk kerangka (skeleton) baris karakter
 const RowSkeleton = () => (
@@ -83,7 +91,7 @@ export default function AllTopCharacterPage() {
     <div className="bg-gray-950 min-h-screen">
       <Header user={profile} loading={profileLoading} />
       <main className="p-4 sm:p-6 lg:p-8">
-        <h1 className="text-3xl font-bold text-white mb-6">Top Karakter Terpopuler</h1>
+        <SectionHeader title="Top Karakter Terpopuler" />
         
         {/* Tampilkan kerangka jika loading, atau konten jika sudah siap */}
         {loading && characters.length === 0 ? (

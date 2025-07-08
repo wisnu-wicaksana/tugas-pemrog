@@ -2,16 +2,37 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { HeartIcon } from '@heroicons/react/24/solid';
+import toast from 'react-hot-toast';
+import CustomToast from '@/components/CustomToast';
+import apiClient from '@/lib/apiClient';
 
 const CharacterRow = ({ character, rank, isFavorited, onFavoriteChange }) => {
-  const handleFavoriteClick = (event) => {
+  const handleFavoriteClick = async (event) => {
     event.preventDefault();
-    const item = {
-      mal_id: character.mal_id,
-      title: character.name,
-      images: character.images,
-    };
-    onFavoriteChange(item, isFavorited);
+
+    if (isFavorited) {
+      try {
+        await apiClient.delete(`/favorites/${character.mal_id}`);
+        toast.custom((t) => <CustomToast t={t} type="delete" title="Berhasil Dihapus" message={`"${character.name}" telah dihapus.`} />);
+        if (onFavoriteChange) onFavoriteChange();
+      } catch (error) {
+        toast.custom((t) => <CustomToast t={t} type="error" title="Gagal Menghapus" message={error.response?.data?.message || 'Terjadi kesalahan.'} />);
+      }
+    } else {
+      try {
+        await apiClient.post('/favorites', {
+          malId: character.mal_id,
+          title: character.name, // Karakter menggunakan 'name' sebagai judul
+          imageUrl: character.images?.webp?.image_url,
+          score: character.favorites, // Kita bisa gunakan jumlah favorit sebagai 'score'
+          type: 'CHARACTER', // Menambahkan tipe data
+        });
+        toast.custom((t) => <CustomToast t={t} type="success" title="Berhasil Ditambahkan" message={`"${character.name}" telah ditambahkan.`} />);
+        if (onFavoriteChange) onFavoriteChange();
+      } catch (error) {
+        toast.custom((t) => <CustomToast t={t} type="error" title="Gagal Menambahkan" message={error.response?.data?.message || 'Terjadi kesalahan.'} />);
+      }
+    }
   };
 
   return (
