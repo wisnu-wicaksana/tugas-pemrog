@@ -87,7 +87,7 @@ export default function FavoritePage() {
       jpg: { large_image_url: fav.imageUrl, image_url: fav.imageUrl }
     },
     score: fav.score || null,
-    year: null,
+    year: fav.year,
     name: fav.title, 
     favorites: fav.score || 0,
     url: `/detail/character/${fav.malId}`
