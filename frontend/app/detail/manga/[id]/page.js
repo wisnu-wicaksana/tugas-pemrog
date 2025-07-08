@@ -12,6 +12,42 @@ import { HeartIcon, StarIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
 import CustomToast from '@/components/CustomToast';
 
+// Tambahkan komponen ini di dalam file: app/detail/manga/[id]/page.js
+
+const DetailPageSkeleton = () => (
+  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-pulse">
+    {/* Kolom Kiri Skeleton */}
+    <div className="lg:col-span-1">
+      <div className="sticky top-24">
+        <div className="aspect-[2/3] w-full max-w-sm mx-auto bg-gray-800 rounded-xl"></div>
+        <div className="h-12 w-full max-w-sm mx-auto mt-4 bg-gray-800 rounded-lg"></div>
+      </div>
+    </div>
+    {/* Kolom Kanan Skeleton */}
+    <div className="lg:col-span-2 space-y-8">
+      <div>
+        <div className="h-6 w-1/4 bg-gray-800 rounded-md"></div>
+        <div className="h-12 w-3/4 bg-gray-800 rounded-md mt-3"></div>
+        <div className="h-8 w-1/2 bg-gray-800 rounded-md mt-2"></div>
+      </div>
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
+        <div className="h-16 bg-gray-800 rounded-lg"></div>
+        <div className="h-16 bg-gray-800 rounded-lg"></div>
+        <div className="h-16 bg-gray-800 rounded-lg"></div>
+        <div className="h-16 bg-gray-800 rounded-lg"></div>
+      </div>
+      <div>
+        <div className="h-7 w-1/3 bg-gray-800 rounded-md mb-3"></div>
+        <div className="space-y-2">
+          <div className="h-4 bg-gray-800 rounded"></div>
+          <div className="h-4 bg-gray-800 rounded w-11/12"></div>
+          <div className="h-4 bg-gray-800 rounded w-5/6"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 // Komponen kecil untuk menampilkan info dengan label
 const InfoPill = ({ label, value }) => (
   <div className="flex flex-col bg-gray-800 p-3 rounded-lg text-center">
@@ -98,24 +134,17 @@ export default function MangaDetailPage() {
   };
 
   // Tampilan loading utama
-  if (loading) {
-    return (
-        <div className="bg-gray-950 min-h-screen">
-            <Header loading={true} />
-            <div className="text-center text-gray-400 p-10">Memuat data manga...</div>
-        </div>
-    );
-  }
-
-  // Tampilan jika manga tidak ditemukan
-  if (!manga) {
-    return (
-        <div className="bg-gray-950 min-h-screen">
-            <Header user={profile} loading={profileLoading} />
-            <div className="text-center text-gray-400 p-10">Manga tidak ditemukan.</div>
-        </div>
-    );
-  }
+// Kode baru dengan skeleton
+if (loading) {
+  return (
+    <div className="bg-gray-950 min-h-screen">
+      <Header loading={true} />
+      <main className="p-4 sm:p-6 lg:p-8">
+        <DetailPageSkeleton />
+      </main>
+    </div>
+  );
+}
   
   // Tampilan utama halaman detail manga
   return (

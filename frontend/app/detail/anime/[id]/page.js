@@ -12,6 +12,41 @@ import { HeartIcon, StarIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
 import CustomToast from '@/components/CustomToast';
 
+const DetailPageSkeleton = () => (
+  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-pulse">
+    {/* Kolom Kiri Skeleton */}
+    <div className="lg:col-span-1">
+      <div className="sticky top-24">
+        <div className="aspect-[2/3] w-full max-w-sm mx-auto bg-gray-800 rounded-xl"></div>
+        <div className="h-12 w-full max-w-sm mx-auto mt-4 bg-gray-800 rounded-lg"></div>
+      </div>
+    </div>
+    {/* Kolom Kanan Skeleton */}
+    <div className="lg:col-span-2 space-y-8">
+      <div>
+        <div className="h-6 w-1/4 bg-gray-800 rounded-md"></div>
+        <div className="h-12 w-3/4 bg-gray-800 rounded-md mt-3"></div>
+        <div className="h-8 w-1/2 bg-gray-800 rounded-md mt-2"></div>
+      </div>
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
+        <div className="h-16 bg-gray-800 rounded-lg"></div>
+        <div className="h-16 bg-gray-800 rounded-lg"></div>
+        <div className="h-16 bg-gray-800 rounded-lg"></div>
+        <div className="h-16 bg-gray-800 rounded-lg"></div>
+      </div>
+      <div>
+        <div className="h-7 w-1/3 bg-gray-800 rounded-md mb-3"></div>
+        <div className="space-y-2">
+          <div className="h-4 bg-gray-800 rounded"></div>
+          <div className="h-4 bg-gray-800 rounded w-11/12"></div>
+          <div className="h-4 bg-gray-800 rounded w-5/6"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+
 // Komponen kecil untuk menampilkan info dengan label
 const InfoPill = ({ label, value }) => (
   <div className="flex flex-col bg-gray-800 p-3 rounded-lg text-center">
@@ -97,76 +132,67 @@ export default function AnimeDetailPage() {
     }
   };
 
-  // Tampilan loading utama
-  if (loading) {
-    return (
-        <div className="bg-gray-950 min-h-screen">
-            <Header loading={true} />
-            <div className="text-center text-gray-400 p-10">Memuat data anime...</div>
-        </div>
-    );
-  }
 
-  // Tampilan jika anime tidak ditemukan
-  if (!anime) {
-    return (
-        <div className="bg-gray-950 min-h-screen">
-            <Header user={profile} loading={profileLoading} />
-            <div className="text-center text-gray-400 p-10">Anime tidak ditemukan.</div>
-        </div>
-    );
-  }
+
   
   // Tampilan utama halaman detail anime
-  return (
+return (
     <div className="bg-gray-950 min-h-screen">
-        <Header user={profile} loading={profileLoading} /> 
-        <main className="p-4 sm:p-6 lg:p-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 text-white">
-                {/* Kolom Kiri: Poster dan Tombol Aksi */}
-                <div className="lg:col-span-1">
-                  <div className="sticky top-24">
-                    <Image src={anime.images.webp.large_image_url} alt={`Poster of ${anime.title}`} width={500} height={750} className="rounded-xl shadow-lg w-full max-w-sm mx-auto" priority/>
-                    <button onClick={handleFavoriteClick} className={`w-full max-w-sm mx-auto mt-4 p-3 rounded-lg font-bold flex items-center justify-center transition-colors ${isFavorited ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}><HeartIcon className="w-6 h-6 mr-2" />{isFavorited ? 'Hapus dari Favorit' : 'Tambah ke Favorit'}</button>
-                  </div>
-                </div>
-                {/* Kolom Kanan: Informasi Detail */}
-                <div className="lg:col-span-2">
-                  <p className="text-sm text-blue-400 font-semibold">{anime.type} • {anime.status}</p>
-                  <h1 className="text-4xl md:text-5xl font-extrabold my-2">{anime.title}</h1>
-                  <h2 className="text-xl text-gray-400 mb-6">{anime.title_japanese}</h2>
-
-                  <div className="flex items-center space-x-4 mb-6">
-                    <div className="flex items-center space-x-2">
-                      <StarIcon className="w-8 h-8 text-yellow-400" />
-                      <div>
-                        <p className="text-2xl font-bold">{anime.score || 'N/A'}</p>
-                        <p className="text-xs text-gray-400">{anime.scored_by?.toLocaleString() || 0} suara</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 mb-8">
-                    <InfoPill label="Rank" value={`#${anime.rank || 'N/A'}`} />
-                    <InfoPill label="Popularity" value={`#${anime.popularity || 'N/A'}`} />
-                    <InfoPill label="Episodes" value={anime.episodes || '?'} />
-                    <InfoPill label="Duration" value={anime.duration || '?'} />
-                  </div>
-                  
-                  <h3 className="text-xl font-bold mb-2">Sinopsis</h3>
-                  <p className="text-gray-300 text-base leading-relaxed whitespace-pre-wrap">{anime.synopsis || 'Tidak ada sinopsis.'}</p>
-                  
-                  {anime.trailer?.embed_url && (
-                    <div className="mt-8">
-                      <h3 className="text-xl font-bold text-white mb-4">Trailer</h3>
-                      <div className="aspect-video">
-                        <iframe src={anime.trailer.embed_url} title="Anime Trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full rounded-xl"></iframe>
-                      </div>
-                    </div>
-                  )}
-                </div>
+      {/* Header akan menampilkan loading state-nya sendiri */}
+      <Header user={profile} loading={profileLoading} />
+      
+      <main className="p-4 sm:p-6 lg:p-8">
+        {/* Gunakan skeleton jika loading, atau tampilkan konten jika sudah selesai */}
+        {loading ? (
+          <DetailPageSkeleton />
+        ) : !anime ? (
+          <div className="text-center text-gray-400 p-10">Anime tidak ditemukan.</div>
+        ) : (
+          // Konten halaman detail Anda yang sudah ada
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 text-white">
+            {/* Kolom Kiri: Poster dan Tombol Aksi */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-24">
+                <Image src={anime.images.webp.large_image_url} alt={`Poster of ${anime.title}`} width={500} height={750} className="rounded-xl shadow-lg w-full max-w-sm mx-auto" priority/>
+                
+              </div>
             </div>
-        </main>
+            {/* Kolom Kanan: Informasi Detail */}
+            <div className="lg:col-span-2">
+              <p className="text-sm text-blue-400 font-semibold">{anime.type} • {anime.status}</p>
+              <h1 className="text-4xl md:text-5xl font-extrabold my-2">{anime.title}</h1>
+              <h2 className="text-xl text-gray-400 mb-6">{anime.title_japanese}</h2>
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="flex items-center space-x-2">
+                  <StarIcon className="w-8 h-8 text-yellow-400" />
+                  <div>
+                    <p className="text-2xl font-bold">{anime.score || 'N/A'}</p>
+                    <p className="text-xs text-gray-400">{anime.scored_by?.toLocaleString() || 0} suara</p>
+                  </div>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 mb-8">
+                <InfoPill label="Rank" value={`#${anime.rank || 'N/A'}`} />
+                <InfoPill label="Popularity" value={`#${anime.popularity || 'N/A'}`} />
+                <InfoPill label="Episodes" value={anime.episodes || '?'} />
+                <InfoPill label="Duration" value={anime.duration || '?'} />
+              </div>
+
+              <button onClick={handleFavoriteClick} className={`w-full mx-auto mb-8 p-3 rounded-lg font-bold flex items-center justify-center transition-colors ${isFavorited ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}><HeartIcon className="w-6 h-6 mr-2" />{isFavorited ? 'Hapus dari Favorit' : 'Tambah ke Favorit'}</button>
+              <h3 className="text-xl font-bold mb-2">Sinopsis</h3>
+              <p className="text-gray-300 text-base leading-relaxed whitespace-pre-wrap">{anime.synopsis || 'Tidak ada sinopsis.'}</p>
+              {anime.trailer?.embed_url && (
+                <div className="mt-8">
+                  <h3 className="text-xl font-bold text-white mb-4">Trailer</h3>
+                  <div className="aspect-video">
+                    <iframe src={anime.trailer.embed_url} title="Anime Trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full rounded-xl"></iframe>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 }
