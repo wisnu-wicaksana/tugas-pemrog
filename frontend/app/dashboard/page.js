@@ -1,13 +1,19 @@
-// app/dashboard/page.js
+import DashboardClient from './dashboardClient';
+import { getApi } from '@/lib/jikan';
 
-import { Suspense } from "react";
-import DashboardClient from "./dashboardClient"; // Pastikan path import ini benar
+export default async function DashboardPage() {
+  // Hanya ambil data publik. Data user akan diurus oleh DashboardClient.
+  const [topAnime, topManga, topCharacters] = await Promise.all([
+    getApi('top/anime', 'limit=10'),
+    getApi('top/manga', 'limit=10'),
+    getApi('top/characters', 'limit=10')
+  ]);
 
-export default function DashboardPage() {
   return (
-    // Bungkus komponen yang menggunakan useSearchParams dengan Suspense
-    <Suspense fallback={<div>Loading page...</div>}>
-      <DashboardClient />
-    </Suspense>
+    <DashboardClient 
+      topAnime={topAnime}
+      topManga={topManga}
+      topCharacters={topCharacters}
+    />
   );
 }

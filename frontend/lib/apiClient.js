@@ -1,37 +1,32 @@
-// lib/apiClient.js
-export const apiClient = async (method, endpoint, body = null, token = null) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000/api';
-  console.log('🔍 API baseUrl:', baseUrl);
+// file: frontend/lib/apiClient.js
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
-  const headers = {
-    'Content-Type': 'application/json',
-  };
+// Buat instance axios dengan konfigurasi dasar
+const apiClient = axios.create({
+  // baseURL akan mengambil URL API dari file .env.local Anda
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+});
 
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
+// Ini adalah bagian paling kuat: Interceptor
+// Kode ini akan "mencegat" setiap permintaan SEBELUM dikirim
+apiClient.interceptors.request.use(
+  (config) => {
+    // 1. Baca token dari cookie
+    const token = Cookies.get('token');
 
-  const options = {
-    method,
-    headers,
-  };
-
-  if (body) {
-    options.body = JSON.stringify(body);
-  }
-
-  try {
-    const res = await fetch(`${baseUrl}${endpoint}`, options);
-
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || 'Terjadi kesalahan');
+    // 2. Jika token ada, tambahkan ke header Authorization secara otomatis
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
 
-    return await res.json();
-    
-
-  } catch (error) {
-    throw error;
+    // 3. Kembalikan konfigurasi yang sudah dimodifikasi untuk dilanjutkan
+    return config;
+  },
+  (error) => {
+    // Lakukan sesuatu jika terjadi error pada konfigurasi request
+    return Promise.reject(error);
   }
-};
+);
+
+export default apiClient;

@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+#g_id_onload {
+  display: none !important;
+}
