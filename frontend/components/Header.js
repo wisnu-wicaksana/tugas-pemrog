@@ -27,7 +27,7 @@ const Header = ({ user, onSearch }) => {
       {/* Bagian Kiri */}
       <div className="flex items-center space-x-4">
         <Link href="/dashboard" className="text-xl font-bold text-white">
-          Nime<span className="text-blue-400">Verse</span>
+          Zukan<span className="text-blue-400">Verse</span>
         </Link>
       </div>
 

@@ -1,23 +1,23 @@
 // file: frontend/components/character/CharacterList.js
-import CharacterCard from "./CharacterCard";
+import CharacterRow from "./CharacterRow";
 
-// Komponen ini juga sekarang menerima 'favorites' dan 'onFavoriteChange'
-export default function CharacterList({ characters = [], favorites = [], onFavoriteChange }) {
+const CharacterList = ({ characters = [], favorites = [], onFavoriteChange }) => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-      {characters.map((item) => {
-        // Lakukan pengecekan favorit di sini
+    <div className="space-y-3">
+      {characters.map((item, index) => {
         const isFavorited = favorites.some(fav => fav.malId === item.mal_id);
-
         return (
-          <CharacterCard
+          <CharacterRow
             key={item.mal_id}
             character={item}
-            isFavorited={isFavorited} // Kirim status yang benar ke kartu
+            rank={index + 1} // Menambahkan peringkat berdasarkan urutan
+            isFavorited={isFavorited}
             onFavoriteChange={onFavoriteChange}
           />
         );
       })}
     </div>
   );
-}
+};
+
+export default CharacterList;

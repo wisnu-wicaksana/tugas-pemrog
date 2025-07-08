@@ -32,9 +32,9 @@ const CarouselSkeleton = () => (
     <div className="h-8 bg-gray-800 rounded-md w-1/3 mb-4 animate-pulse"></div>
     
     {/* Menggunakan grid yang sama persis dengan AnimeList */}
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
       {/* Kita tampilkan 5 kerangka untuk mengisi satu baris di layar besar */}
-      {[...Array(4)].map((_, i) => (
+      {[...Array(5)].map((_, i) => (
         <CardSkeleton key={i} />
       ))}
     </div>

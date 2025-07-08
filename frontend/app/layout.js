@@ -2,18 +2,20 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'react-hot-toast';
+import Footer from '@/components/Footer';
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'AnimeList Project',
-  description: 'Final Project Pemrograman Kelompok',
+  title: 'ZukanVerse',
+  description: 'Ensiklopedia personal Anda untuk dunia anime, manga, dan karakter.',
 }
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className} bg-gray-950 text-white`}>
+        
         <Toaster
           // 1. Ubah posisi ke kanan bawah
           position="bottom-right" 
@@ -32,6 +34,8 @@ export default function RootLayout({ children }) {
           }}
         />
         {children}
+
+        <Footer /> 
       </body>
     </html>
   )

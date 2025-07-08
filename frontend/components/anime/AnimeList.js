@@ -3,7 +3,7 @@ import AnimeCard from "./AnimeCard";
 
 export default function AnimeList({ anime = [], favorites = [], onFavoriteChange }) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
       {anime.map((a) => {
         const isFavorited = favorites.some(fav => fav.malId === a.mal_id);
         

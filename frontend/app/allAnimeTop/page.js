@@ -1,79 +1,107 @@
+// file: frontend/app/allAnimeTop/page.js
 'use client';
-import { useEffect, useState } from 'react';
-import AnimeList from '@/components/anime/AnimeList';
-import { getApi } from '@/lib/jikan';
 
-export default function AnimePage() {
+import { useEffect, useState } from 'react';
+import { useProfile } from '@/hooks/useProfile';
+import apiClient from '@/lib/apiClient';
+import { getApi } from '@/lib/jikan';
+import Header from '@/components/Header';
+import AnimeList from '@/components/anime/AnimeList';
+
+// Komponen helper untuk kerangka (skeleton) kartu
+const CardSkeleton = () => (
+  <div> 
+    <div className="relative w-full aspect-[2/3] bg-gray-800 rounded-lg animate-pulse"></div>
+    <div className="h-4 bg-gray-800 rounded mt-2 w-3/4 animate-pulse"></div>
+  </div>
+);
+
+// Komponen helper untuk kerangka grid
+const GridSkeleton = () => (
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        {[...Array(10)].map((_, i) => <CardSkeleton key={i} />)}
+    </div>
+);
+
+
+export default function AllTopAnimePage() {
+  const { profile, loading: profileLoading } = useProfile();
+  
   const [anime, setAnime] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [lastPage, setLastPage] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  // Fungsi untuk mengambil data awal (halaman 1)
+  const fetchInitialData = () => {
     setLoading(true);
-    getApi('top/anime', `page=${page}&limit=20`)
+    getApi('top/anime', `page=1&limit=20`)
       .then((res) => {
-        setAnime(res.data);
-        setHasNextPage(res.pagination?.has_next_page ?? true);
-        setLastPage(res.pagination?.last_visible_page ?? 1);
+        setAnime(res.data || []);
+        setHasNextPage(res.pagination?.has_next_page || false);
+        setPage(2); // Siapkan untuk panggilan "load more" selanjutnya
       })
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, [page]);
-
-  const handleNext = () => {
-    if (hasNextPage) setPage((prev) => prev + 1);
   };
 
-  const handlePrev = () => {
-    if (page > 1) setPage((prev) => prev - 1);
+  // Ambil data awal dan data favorit saat komponen dimuat
+  useEffect(() => {
+    fetchInitialData();
+    if (profile) {
+      apiClient.get('/favorites').then(res => setFavorites(res.data || []));
+    }
+  }, [profile]);
+
+  const handleFavoriteChange = async () => {
+    const res = await apiClient.get('/favorites');
+    setFavorites(res.data || []);
+  };
+
+  const handleLoadMore = async () => {
+    if (!hasNextPage || loading) return;
+
+    setLoading(true);
+    const nextPageData = await getApi('top/anime', `page=${page}&limit=20`);
+    if (nextPageData?.data) {
+      setAnime(prev => [...prev, ...nextPageData.data]);
+      setPage(prev => prev + 1);
+      setHasNextPage(nextPageData.pagination.has_next_page);
+    }
+    setLoading(false);
   };
 
   return (
-    <main className="p-4">
-      <div className="mb-4 text-right">
-        <a href="/favorite" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-          Lihat Favorit
-        </a>
-      </div>
+    <div className="bg-gray-950 min-h-screen">
+      <Header user={profile} loading={profileLoading} />
+      <main className="p-4 sm:p-6 lg:p-8">
+        <h1 className="text-3xl font-bold text-white mb-6">Semua Anime</h1>
+        
+        {/* Tampilkan kerangka jika loading, atau konten jika sudah siap */}
+        {loading && anime.length === 0 ? (
+          <GridSkeleton />
+        ) : (
+          <AnimeList
+            anime={anime}
+            favorites={favorites}
+            onFavoriteChange={handleFavoriteChange}
+          />
+        )}
 
-       <div className="mb-4 text-right">
-        <a href="/dashboard" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-          Kembali ke Beranda
-        </a>
-      </div>
-
-      <h1 className="text-2xl font-bold mb-4">Top Anime - Page {page}</h1>
-
-      {loading ? (
-        <p className="text-center text-gray-500">Loading...</p>
-      ) : (
-        <AnimeList anime={anime} showAdd />
-      )}
-
-      <div className="mt-6 flex justify-center items-center space-x-4">
-        <button
-          onClick={handlePrev}
-          disabled={page === 1}
-          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-        >
-          Previous
-        </button>
-
-        <span className="text-sm text-gray-600">
-          Page {page} of {lastPage}
-        </span>
-
-        <button
-          onClick={handleNext}
-          disabled={!hasNextPage}
-          className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
-    </main>
+        {/* Tombol "Muat Lebih Banyak" */}
+        <div className="flex justify-center mt-8">
+          {hasNextPage && (
+            <button
+              onClick={handleLoadMore}
+              disabled={loading}
+              className="bg-blue-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-600 transition-all disabled:bg-gray-600 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Memuat...' : 'Muat Lebih Banyak'}
+            </button>
+          )}
+        </div>
+      </main>
+    </div>
   );
 }
-
