@@ -15,8 +15,8 @@ function isValidSignature(req) {
 
 async function handleWebhook(req, res) {
   try {
-    // ✅ parse dari raw buffer
-    const payload = JSON.parse(req.body.toString());
+    
+    const payload = req.body;
 
     console.log("Webhook diterima:", payload);
 
