@@ -1,7 +1,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-require('./config/passport');
+const bodyParser = require("body-parser");
+
+dotenv.config();
 
 const authRoutes = require('./routes/auth.routes');
 const favoriteRoutes = require('./routes/favorite.routes');
@@ -11,33 +13,32 @@ const paymentSuccessRoute = require('./routes/payment-success.route');
 const userRoutes = require('./routes/user.routes');
 
 const app = express();
-dotenv.config();
 
+// ✅ CORS untuk frontend
 app.use(cors({
-  origin: process.env.FRONTEND_URL, // contoh: https://tugas-pemrog.vercel.app
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true, // jika pakai cookie, session, atau token yang butuh cross-origin
+  origin: process.env.FRONTEND_URL
 }));
 
+// ✅ Raw body khusus untuk webhook
+app.use('/api/webhook/payment', bodyParser.raw({ type: 'application/json' }));
 
-
-
-//  Middleware umum untuk endpoint lainnya
+// ✅ JSON parser untuk route lain
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//  Routing
+// ✅ Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/favorites', favoriteRoutes);
 app.use('/api/payment', paymentRoutes);
-app.use('/api/webhook', webhookRoutes); 
+app.use('/api/webhook', webhookRoutes); // berisi: /payment
 app.use('/api', paymentSuccessRoute);
 
 app.get("/api", (req, res) => {
-  res.json({ message: "HELLO WORLD - API Server is Running!" });
+  res.json({ message: "API Server is Running!" });
 });
 
+// ✅ Error handler
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ message: err.message });
