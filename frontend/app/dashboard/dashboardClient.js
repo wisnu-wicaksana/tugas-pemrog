@@ -50,13 +50,16 @@ const SectionHeader = ({ title, href }) => (
         {title}
       </h2>
     </div>
-    <Link
-      href={href || "#"}
-      className="group flex items-center space-x-1 text-sm font-semibold text-gray-400 hover:text-white transition-colors"
-    >
-      <span>Lihat Semua</span>
-      <ChevronRightIcon className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
-    </Link>
+   {/* Sembunyikan tombol jika di halaman /search/anime/[query] */}
+      {!isSearchPage && (
+        <Link
+          href={href || "#"}
+          className="group flex items-center space-x-1 text-sm font-semibold text-gray-400 hover:text-white transition-colors"
+        >
+          <span>Lihat Semua</span> 
+          <ChevronRightIcon className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+        </Link>
+      )}
   </div>
 );
 

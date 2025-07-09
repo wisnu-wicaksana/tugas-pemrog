@@ -24,7 +24,7 @@ const PaymentForm = ({ onSubmit, loading }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Harga membership bisa Anda tentukan di sini atau ambil dari backend
-    onSubmit({ amount: 15000, paymentMethod: selectedMethod });
+    onSubmit({ amount: 150000, paymentMethod: selectedMethod });
   };
 
   return (
