@@ -14,10 +14,12 @@ const userRoutes = require('./routes/user.routes');
 const app = express();
 dotenv.config();
 
-//  CORS
 app.use(cors({
-  origin: process.env.FRONTEND_URL
+  origin: process.env.FRONTEND_URL, // contoh: https://tugas-pemrog.vercel.app
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true, // jika pakai cookie, session, atau token yang butuh cross-origin
 }));
+
 
 // Raw body khusus untuk webhook Tripay
 app.use('/api/webhook/payment', bodyParser.raw({ type: '*/*' }));
