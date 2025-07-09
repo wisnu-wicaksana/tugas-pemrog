@@ -59,7 +59,6 @@ async function createTripayTransaction({ userId, amount, paymentMethod }) {
   const data = await response.json();
 
   if (!data.success) {
-    throw new Error(data.message || 'Gagal membuat transaksi');
   }
 
   
@@ -72,10 +71,10 @@ async function createTripayTransaction({ userId, amount, paymentMethod }) {
     paymentMethod
   });
 
-  return data.data
-     
-    
-  
+ return {
+    ...data.data,
+    checkout_url: `${process.env.FRONTEND_URL}/dev/simulate-payment?ref=${merchantRef}&amount=${amount}`
+  };
 }
 
 async function updatePaymentStatus(payload) {
@@ -99,5 +98,3 @@ module.exports = {
   createTripayTransaction,
   updatePaymentStatus
 };
-
-

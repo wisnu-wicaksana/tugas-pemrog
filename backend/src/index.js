@@ -1,7 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const bodyParser = require("body-parser");
+require(`./config/passport`)
 
 dotenv.config();
 
@@ -19,8 +19,7 @@ app.use(cors({
   origin: process.env.FRONTEND_URL
 }));
 
-// ✅ Raw body khusus untuk webhook
-app.use('/api/webhook/payment', bodyParser.raw({ type: '*/*' }));
+
 
 // ✅ JSON parser untuk route lain
 app.use(express.json());
