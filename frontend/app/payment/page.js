@@ -159,7 +159,7 @@ export default function PaymentPage() {
                 </li>
                 <li className="flex items-start">
                   <CheckCircleIcon className="h-6 w-6 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
-                  <span>Dapatkan badge "MEMBER" eksklusif di profil Anda.</span>
+                  <span>Dapatkan badge &quot;MEMBER&quot; eksklusif di profil Anda.</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircleIcon className="h-6 w-6 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
