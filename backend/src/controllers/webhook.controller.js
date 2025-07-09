@@ -2,12 +2,12 @@ const crypto = require('crypto');
 const { updatePaymentStatus } = require('../services/payment.service');
 const tripayConfig = require('../config/tripay');
 
-// 🔒 Fungsi untuk verifikasi signature dari Tripay
+// 🔐 Validasi Signature
 function isValidSignature(req) {
   const callbackSignature = req.headers['x-callback-signature'];
   const computedSignature = crypto
     .createHmac('sha256', tripayConfig.privateKey)
-    .update(JSON.stringify(req.body))
+    .update(req.body) // raw body, bukan stringify
     .digest('hex');
 
   return callbackSignature === computedSignature;
@@ -15,27 +15,24 @@ function isValidSignature(req) {
 
 async function handleWebhook(req, res) {
   try {
-    const payload = req.body;
+    // ✅ parse dari raw buffer
+    const payload = JSON.parse(req.body.toString());
+
     console.log("Webhook diterima:", payload);
 
-    // ❗ Validasi isi payload
     if (!payload.merchant_ref || !payload.status) {
       return res.status(400).json({ message: 'Payload tidak lengkap' });
     }
 
-    // ✅ Validasi signature Tripay
     if (!isValidSignature(req)) {
-      console.warn("Signature tidak valid");
+      console.warn("❌ Signature tidak valid");
       return res.status(403).json({ message: 'Signature tidak valid' });
     }
 
-    console.log("Signature valid. Memproses update status untuk:", payload.merchant_ref);
+    console.log("✅ Signature valid. Update status untuk:", payload.merchant_ref);
 
     await updatePaymentStatus(payload);
 
-    console.log("Status pembayaran berhasil diperbarui");
-
-    // ✅ Harus mengirim respons 200 + JSON agar Tripay mencatat IPN SUKSES
     return res.status(200).json({ message: 'Webhook diterima dan diproses' });
 
   } catch (error) {
