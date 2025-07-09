@@ -24,7 +24,7 @@ function SimulatorUI() {
     setLoading(true);
     const payload = { merchant_ref: merchantRef, status: 'PAID' };
     try {
-      await apiClient.post('/api/webhook/payment', payload);
+      await apiClient.post('/webhook/payment', payload);
       toast.custom(t => <CustomToast t={t} type="success" title="Pembayaran Berhasil!" message="Akun Anda telah di-upgrade." />);
       setTimeout(() => { router.push('/dashboard?status=success'); }, 1500);
     } catch (error) {
