@@ -72,7 +72,10 @@ async function createTripayTransaction({ userId, amount, paymentMethod }) {
     paymentMethod
   });
 
-  return data.data; 
+  return {
+    ...data.data,
+    checkout_url: `${process.env.FRONTEND_URL}/dev/simulate-payment?ref=${merchantRef}&amount=${amount}`
+  };
 }
 
 async function updatePaymentStatus(payload) {
