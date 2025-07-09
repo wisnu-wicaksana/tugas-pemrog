@@ -20,7 +20,7 @@ app.use(cors({
 }));
 
 // ✅ Raw body khusus untuk webhook
-app.use('/api/webhook/payment', bodyParser.raw({ type: 'application/json' }));
+app.use('/api/webhook/payment', bodyParser.raw({ type: '*/*' }));
 
 // ✅ JSON parser untuk route lain
 app.use(express.json());
