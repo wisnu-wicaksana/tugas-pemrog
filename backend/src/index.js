@@ -1,7 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const bodyParser = require("body-parser");
 require('./config/passport');
 
 const authRoutes = require('./routes/auth.routes');
@@ -21,8 +20,7 @@ app.use(cors({
 }));
 
 
-// Raw body khusus untuk webhook Tripay
-app.use('/api/webhook/payment', bodyParser.raw({ type: '*/*' }));
+
 
 //  Middleware umum untuk endpoint lainnya
 app.use(express.json());
